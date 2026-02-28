@@ -4,6 +4,7 @@ import { CartProvider } from "@/context/cart-context"
 import Header from "@/components/header"
 import Hero from "@/components/hero"
 import Products from "@/components/products"
+import Collections from "@/components/collections"
 import About from "@/components/about"
 import Contact from "@/components/contact"
 import Footer from "@/components/footer"
@@ -16,8 +17,9 @@ export default function Home() {
         <Hero />
         <Products />
         <About />
+        <Collections/>
         <Contact />
-        <Footer />
+        {/* <Footer /> */}
       </main>
     </CartProvider>
   )
