@@ -1,29 +1,23 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
-
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
-
-export const metadata: Metadata = {
-  title: "Sarasss - Premium Clothing Brand",
-  description: "Discover premium, minimalist clothing by Sarasss. Timeless pieces for modern living.",
-  generator: "v0.app",
-}
+import { CartProvider } from "@/context/cart-context";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import "./globals.css";
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
-        {children}
-        <Analytics />
+      <body className="bg-black antialiased">
+        {/* All context providers must wrap the children here */}
+        <CartProvider>
+          <Header />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
-  )
+  );
 }
