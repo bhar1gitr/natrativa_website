@@ -1,6 +1,7 @@
 import { CartProvider } from "@/context/cart-context";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import VideoPreloader from "@/components/video-preloader"; // Import your new component
 import "./globals.css";
 
 export default function RootLayout({
@@ -11,11 +12,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-black antialiased">
-        {/* All context providers must wrap the children here */}
+        {/* The CartProvider wraps everything to share state */}
         <CartProvider>
+          
+          {/* 1. The Video Preloader sits at the top level to cover the screen */}
+          <VideoPreloader />
+
+          {/* 2. The standard site layout remains below */}
           <Header />
-          {children}
+          <main className="min-h-screen">
+            {children}
+          </main>
           <Footer />
+
         </CartProvider>
       </body>
     </html>

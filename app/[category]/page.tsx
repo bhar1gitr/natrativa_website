@@ -80,7 +80,7 @@ export default function CategoryPage() {
         )}
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </main>
   )
 }

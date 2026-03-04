@@ -12,7 +12,7 @@ export default function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onCl
     // 1. Format the cart items for the WhatsApp message
     const cartSummary = items
       .map((item) => {
-        // Strip out the ₹ and commas to do the math, then format back to Indian style
+        // Strip out currency symbols and commas for calculation
         const itemPrice = parseFloat(item.price.replace(/[₹, ]/g, ""))
         const lineTotal = (itemPrice * item.quantity).toLocaleString('en-IN')
         return `▪ ${item.name} (x${item.quantity}) - ₹${lineTotal}`
@@ -22,7 +22,7 @@ export default function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onCl
     // 2. Create the Premium Concierge Message
     const message = `Greetings NETRUTV Concierge. I would like to finalize my collection:\n\n${cartSummary}\n\n*Total Value: ${total}*`
     
-    // 3. Open WhatsApp with your specific number (91 added for India country code)
+    // 3. TARGET NUMBER: 917039674351
     window.open(`https://wa.me/917039674351?text=${encodeURIComponent(message)}`, "_blank")
     
     // 4. Clear the cart and close the sidebar
@@ -75,10 +75,8 @@ export default function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onCl
                       <Trash2 size={14} />
                     </button>
                   </div>
-                  {/* Item price */}
                   <p className="text-[#d4af37] font-playfair italic text-lg">{item.price}</p>
                   
-                  {/* Quantity Controls */}
                   <div className="flex items-center gap-4 mt-4">
                     <div className="flex items-center border border-zinc-800 rounded-sm bg-black">
                       <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-3 py-1 text-zinc-500 hover:text-white transition-colors"><Minus size={12}/></button>
@@ -97,7 +95,6 @@ export default function CartSidebar({ isOpen, onClose }: { isOpen: boolean; onCl
           <div className="absolute bottom-0 left-0 w-full p-8 bg-black border-t border-zinc-900 space-y-6">
             <div className="flex justify-between items-end">
               <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-bold">Subtotal Value</span>
-              {/* Removed the hardcoded $ since total from context already includes ₹ */}
               <span className="text-2xl font-playfair text-[#d4af37]">{total}</span>
             </div>
             
