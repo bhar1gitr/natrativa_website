@@ -260,8 +260,6 @@
 
 
 
-
-
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
@@ -270,20 +268,35 @@ import { useCart } from "@/context/cart-context"
 import { products } from "../lib/products"
 
 export default function CollectionsPage() {
-
   const { addToCart } = useCart()
 
   const [activeCategory, setActiveCategory] = useState("All")
+  const [activeSubCategory, setActiveSubCategory] = useState("All")
   const [activeTheme, setActiveTheme] = useState("All")
   const [priceRange, setPriceRange] = useState("All")
-
   const [isFiltering, setIsFiltering] = useState(false)
 
-  useEffect(() => {}, [])
-
   const categories = ["All", "T-Shirts", "Shirts", "Pants", "Bags"]
-
   const themes = ["All", "Spiritual", "Marvel", "Embroidery", "Polo"]
+
+  const subCategories = useMemo(() => {
+    const cat = activeCategory.toLowerCase()
+    setActiveSubCategory("All")
+
+    if (cat === "t-shirts") {
+      return ["All", "Round Neck", "Polo", "Dry Fit", "Oversize Graphic", "Long Sleeve", "Sports", "Hoodie", "Stripped", "Henley", "Sleeve Less", "Drop Sholder", "Puff Print"]
+    }
+    if (cat === "pants") {
+      return ["All", "Chinos", "Pull on Denim", "Jogger", "Trouser", "Baggy", "Cargo"]
+    }
+    if (cat === "shirts") {
+      return ["All", "Classic", "Formal", "Denim", "Printed", "Mandarin Collar", "Linen", "Half Sleeve"]
+    }
+    if (cat === "bags") {
+      return ["All", "Leather", "Backpack", "Laptop"]
+    }
+    return []
+  }, [activeCategory])
 
   const priceFilters = [
     { label: "All", min: 0, max: 100000 },
@@ -299,272 +312,139 @@ export default function CollectionsPage() {
   }
 
   const filteredItems = useMemo(() => {
-
     return products.filter(item => {
+      // 1. MATCH CATEGORY (Mapping 'type' from data)
+      // Note: Data is "tshirts", UI is "T-Shirts"
+      const normalizedDataCat = item.type.toLowerCase().replace("-", "") 
+      const normalizedActiveCat = activeCategory.toLowerCase().replace("-", "")
+      const matchCategory = activeCategory === "All" || normalizedDataCat === normalizedActiveCat
 
-      const matchCategory =
-        activeCategory === "All" || item.category === activeCategory
+      // 2. MATCH SUB-CATEGORY (Mapping 'sub' from data)
+      const matchSubCategory = activeSubCategory === "All" || item.sub === activeSubCategory
 
-      const matchTheme =
-        activeTheme === "All" || item.theme === activeTheme
+      // 3. MATCH THEME (Theme isn't in your data snippet, so we'll assume true if missing)
+      const matchTheme = activeTheme === "All" || (item as any).theme === activeTheme
 
+      // 4. MATCH PRICE (Converting "₹1,499" string to number 1499)
+      const numericPrice = Number(item.price.replace(/[^0-9.-]+/g, ""))
       const priceObj = priceFilters.find(p => p.label === priceRange)
+      const matchPrice = numericPrice >= (priceObj?.min || 0) && numericPrice <= (priceObj?.max || 100000)
 
-      const matchPrice =
-        item.price >= (priceObj?.min || 0) &&
-        item.price <= (priceObj?.max || 100000)
-
-      return matchCategory && matchTheme && matchPrice
-
+      return matchCategory && matchSubCategory && matchTheme && matchPrice
     })
-
-  }, [activeCategory, activeTheme, priceRange])
-
+  }, [activeCategory, activeSubCategory, activeTheme, priceRange])
 
   const col1 = filteredItems.filter((_, i) => i % 3 === 0)
   const col2 = filteredItems.filter((_, i) => i % 3 === 1)
   const col3 = filteredItems.filter((_, i) => i % 3 === 2)
 
-
   return (
     <main className="min-h-screen bg-black text-white pt-40 pb-32 overflow-hidden">
-
       <div className="max-w-[1800px] mx-auto px-6 lg:px-24">
-
-        {/* HEADER */}
         <header className="mb-20">
-
-          <h1 className="text-6xl font-bold mb-16">
-            Collections
-          </h1>
-
-          {/* FILTERS */}
-
+          <h1 className="text-6xl font-bold mb-16">Collections</h1>
           <div className="space-y-8 border-y border-zinc-900 py-12">
-
+            
             {/* CATEGORY */}
-
             <div className="flex items-center gap-x-12">
-
-              <span className="text-xs uppercase text-zinc-500 w-32">
-                Category
-              </span>
-
-              <div className="flex gap-6">
-
+              <span className="text-xs uppercase text-zinc-500 w-32">Category</span>
+              <div className="flex flex-wrap gap-6">
                 {categories.map(cat => (
-
                   <button
                     key={cat}
                     onClick={() => handleFilterChange(setActiveCategory, cat)}
-                    className={`uppercase text-xs ${
-                      activeCategory === cat
-                        ? "text-[#d4af37]"
-                        : "text-zinc-500 hover:text-white"
-                    }`}
+                    className={`uppercase text-xs transition ${activeCategory === cat ? "text-[#d4af37]" : "text-zinc-500 hover:text-white"}`}
                   >
                     {cat}
                   </button>
-
                 ))}
-
               </div>
-
             </div>
 
+            {/* SUB-CATEGORY */}
+            {subCategories.length > 0 && (
+              <div className="flex items-start gap-x-12">
+                <span className="text-xs uppercase text-zinc-500 w-32 mt-1">Type</span>
+                <div className="flex flex-wrap gap-x-6 gap-y-3">
+                  {subCategories.map(sub => (
+                    <button
+                      key={sub}
+                      onClick={() => handleFilterChange(setActiveSubCategory, sub)}
+                      className={`uppercase text-[10px] tracking-widest transition ${activeSubCategory === sub ? "text-[#d4af37] border-b border-[#d4af37]" : "text-zinc-500 hover:text-white"}`}
+                    >
+                      {sub}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* THEME */}
-
             <div className="flex items-center gap-x-12">
-
-              <span className="text-xs uppercase text-zinc-500 w-32">
-                Theme
-              </span>
-
+              <span className="text-xs uppercase text-zinc-500 w-32">Theme</span>
               <div className="flex gap-6">
-
                 {themes.map(t => (
-
                   <button
                     key={t}
                     onClick={() => handleFilterChange(setActiveTheme, t)}
-                    className={`uppercase text-xs ${
-                      activeTheme === t
-                        ? "text-[#d4af37]"
-                        : "text-zinc-500 hover:text-white"
-                    }`}
+                    className={`uppercase text-xs ${activeTheme === t ? "text-[#d4af37]" : "text-zinc-500 hover:text-white"}`}
                   >
                     {t}
                   </button>
-
                 ))}
-
               </div>
-
             </div>
 
             {/* PRICE */}
-
             <div className="flex items-center gap-x-12">
-
-              <span className="text-xs uppercase text-zinc-500 w-32">
-                Price
-              </span>
-
+              <span className="text-xs uppercase text-zinc-500 w-32">Price</span>
               <div className="flex gap-6">
-
                 {priceFilters.map(p => (
-
                   <button
                     key={p.label}
                     onClick={() => handleFilterChange(setPriceRange, p.label)}
-                    className={`uppercase text-xs ${
-                      priceRange === p.label
-                        ? "text-[#d4af37]"
-                        : "text-zinc-500 hover:text-white"
-                    }`}
+                    className={`uppercase text-xs ${priceRange === p.label ? "text-[#d4af37]" : "text-zinc-500 hover:text-white"}`}
                   >
                     {p.label}
                   </button>
-
                 ))}
-
               </div>
-
             </div>
-
           </div>
-
         </header>
 
-
-        {/* GRID */}
-
         {filteredItems.length > 0 ? (
-
-          <div
-            className={`grid grid-cols-1 md:grid-cols-3 gap-12 transition-opacity duration-300 ${
-              isFiltering ? "opacity-0" : "opacity-100"
-            }`}
-          >
-
-            {/* COL1 */}
-
-            <div className="space-y-20">
-              {col1.map((item, i) => (
-                <ProductCard
-                  key={item.id}
-                  product={item}
-                  addToCart={addToCart}
-                />
-              ))}
-            </div>
-
-            {/* COL2 */}
-
-            <div className="space-y-20 md:mt-40">
-              {col2.map((item, i) => (
-                <ProductCard
-                  key={item.id}
-                  product={item}
-                  addToCart={addToCart}
-                />
-              ))}
-            </div>
-
-            {/* COL3 */}
-
-            <div className="space-y-20 md:mt-80">
-              {col3.map((item, i) => (
-                <ProductCard
-                  key={item.id}
-                  product={item}
-                  addToCart={addToCart}
-                />
-              ))}
-            </div>
-
+          <div className={`grid grid-cols-1 md:grid-cols-3 gap-12 transition-opacity duration-300 ${isFiltering ? "opacity-0" : "opacity-100"}`}>
+            <div className="space-y-20">{col1.map(item => <ProductCard key={item.id} product={item} addToCart={addToCart} />)}</div>
+            <div className="space-y-20 md:mt-40">{col2.map(item => <ProductCard key={item.id} product={item} addToCart={addToCart} />)}</div>
+            <div className="space-y-20 md:mt-80">{col3.map(item => <ProductCard key={item.id} product={item} addToCart={addToCart} />)}</div>
           </div>
-
         ) : (
-
-          <div className="h-96 flex flex-col items-center justify-center">
-
-            <p className="text-zinc-500 mb-4">
-              No products found
-            </p>
-
-            <button
-              onClick={() => {
-                setActiveCategory("All")
-                setActiveTheme("All")
-                setPriceRange("All")
-              }}
-              className="text-[#d4af37]"
-            >
-              Reset Filters
-            </button>
-
+          <div className="h-96 flex flex-col items-center justify-center text-center">
+            <p className="text-zinc-500 mb-4">No products found matching these criteria.</p>
+            <button onClick={() => { setActiveCategory("All"); setActiveSubCategory("All"); setPriceRange("All"); }} className="text-[#d4af37] underline">Reset Filters</button>
           </div>
-
         )}
-
       </div>
-
     </main>
   )
 }
 
-
 function ProductCard({ product, addToCart }: any) {
-
-  const isSoldOut = product.badge === "Sold Out"
-
   return (
-
     <div className="group">
-
       <Link href={`/product/${product.id}`}>
-
-        <div className="relative aspect-[3/4] overflow-hidden border border-zinc-900">
-
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
-          />
-
-          {product.badge && (
-            <span className="absolute top-4 left-4 text-xs bg-[#d4af37] text-black px-3 py-1">
-              {product.badge}
-            </span>
-          )}
-
+        <div className="relative aspect-[3/4] overflow-hidden border border-zinc-900 bg-zinc-950">
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
         </div>
-
       </Link>
-
       <div className="mt-6">
-
-        <h3 className="text-sm uppercase tracking-widest text-zinc-400">
-          {product.name}
-        </h3>
-
-        <p className="text-2xl mt-2">
-          ₹{product.price.toLocaleString()}
-        </p>
-
-        {!isSoldOut && (
-          <button
-            onClick={() => addToCart(product)}
-            className="mt-4 text-xs border border-[#d4af37] px-6 py-2 text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition"
-          >
-            Add to Cart
-          </button>
-        )}
-
+        <h3 className="text-sm uppercase tracking-widest text-zinc-400">{product.name}</h3>
+        <p className="text-2xl mt-2">{product.price}</p>
+        <button onClick={() => addToCart(product)} className="mt-4 text-[10px] uppercase tracking-widest border border-[#d4af37] px-6 py-2 text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition">
+          Add to Cart
+        </button>
       </div>
-
     </div>
-
   )
 }

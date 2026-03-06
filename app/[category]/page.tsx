@@ -22,7 +22,7 @@ export default function CategoryPage() {
     if (category === "tshirts") {
       return ["All", "Round Neck", "Polo", "Dry Fit", "Oversize Graphic", "Long Sleeve", "Sports", "Hoodie", "Stripped", "Henley", "Sleeve Less", "Drop Sholder", "Puff Print"]
     }
-    
+
     // Specific filters for Pants
     if (category === "pants") {
       return ["All", "Chinos", "Pull on Denim", "Jogger", "Trouser", "Baggy", "Cargo"]
@@ -44,7 +44,7 @@ export default function CategoryPage() {
     { id: 2, type: "tshirts", sub: "Polo", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/polo/71YcMBz0guL._AC_SL1500_.jpg" },
     { id: 18, type: "tshirts", sub: "Dry Fit", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/dry_fit/a718f66227c653ca75afdaeaac126045.jpg_720x720q80.jpg" },
     { id: 19, type: "tshirts", sub: "Oversize Graphic", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/oversize_graphic/fhVm0MuU_f588399ed67441a8869f766c625960e7.jpg" },
-    { id: 20, type: "tshirts", sub: "Long Sleeve", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/long_sleeve/Up-to-65-Off-Long-Sleeve-Tee-Shirts-for-Men-Mens-Long-Sleeve-Muscle-T-Shirts-Casual-V-Neck-Longline-Ribbed-Tee-Shirts-Army-Green-L_91d1464e-9c8d-467f-8a53-7.webp"},
+    { id: 20, type: "tshirts", sub: "Long Sleeve", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/long_sleeve/Up-to-65-Off-Long-Sleeve-Tee-Shirts-for-Men-Mens-Long-Sleeve-Muscle-T-Shirts-Casual-V-Neck-Longline-Ribbed-Tee-Shirts-Army-Green-L_91d1464e-9c8d-467f-8a53-7.webp" },
     { id: 21, type: "tshirts", sub: "Sports", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/sports/2c364d00-d2c2-493b-89bd-9dfa131354301706697988593CultsportAllRounderPerformanceTshirt1.jpg" },
     { id: 22, type: "tshirts", sub: "Hoodie", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/hoodie/Wholesale-Custom-No-String-Hoodies-Blank-Various-Colored-100-Cotton-Men-Hoodie-Sweatshirts-Streetwear-Oversized-Cotton-Heavyweight-Plain-Hoody.avif" },
     { id: 23, type: "tshirts", sub: "Stripped", name: "Zen Oversize", price: "₹1,499", image: "/images/tshirts/stripped/SD_03_T28_2209M_F4_X_EC_0.avif" },
@@ -67,23 +67,23 @@ export default function CategoryPage() {
     { id: 8, type: "pants", sub: "Jogger", name: "Formal Trouser", price: "₹3,999", image: "/images/pants/joggers/32574bdd-8cc0-4a3a-8872-a5ebcb20f73f_1.4a4bd5aef2488a9fca6d87c15384200d.webp" },
     { id: 14, type: "pants", sub: "Chinos", name: "Formal Trouser", price: "₹3,999", image: "/images/pants/chinos/09ebee04-1b55-4092-90ad-85662122f4d71534400495919-The-Indian-Garage-Co-Men-Khaki-Regular-Fit-Solid-Chinos-2341-1.jpg" },
     { id: 15, type: "pants", sub: "Pull on Denim", name: "Formal Trouser", price: "₹3,999", image: "/images/pants/denim/Turtle-Bay-New-York-Mens-Comfort-Fit-Casual-Elastic-Waist-Pull-on-Jeans-in-Denim-and-Twill_3132e714-9998-456a-be22-80d045bcc553.6b6ab61c90e36c471e12993117690b6b.webp" },
-    
+
     // Bags
-    {id: 9, type: "bags", sub: "Leather", name: "The City Backpack", price: "₹1,299", image: "/images/bags/leather/TheCityBackpack-0009_1024x.webp" },
-    {id: 10, type: "bags", sub: "Laptop", name: "Lenovo Laptop Shoulder Bag T210, 15.6-Inch Laptop or Tablet", price: "₹1,299", image: "/images/bags/laptop/laptop.webp" },
-    {id: 11, type: "bags", sub: "Laptop", name: "The City Backpack", price: "₹1,299", image: "/images/bags/leather/81-4+26UWML._SL1500_.jpg" },
-    {id: 13, type: "bags", sub: "Backpack", name: "The City Backpack", price: "₹1,299", image: "/images/bags/backpack/black_bag.png" },
+    { id: 9, type: "bags", sub: "Leather", name: "The City Backpack", price: "₹1,299", image: "/images/bags/leather/TheCityBackpack-0009_1024x.webp" },
+    { id: 10, type: "bags", sub: "Laptop", name: "Lenovo Laptop Shoulder Bag T210, 15.6-Inch Laptop or Tablet", price: "₹1,299", image: "/images/bags/laptop/laptop.webp" },
+    { id: 11, type: "bags", sub: "Laptop", name: "The City Backpack", price: "₹1,299", image: "/images/bags/leather/81-4+26UWML._SL1500_.jpg" },
+    { id: 13, type: "bags", sub: "Backpack", name: "The City Backpack", price: "₹1,299", image: "/images/bags/backpack/black_bag.png" },
   ], [])
 
   // Smart Filter: Filter by main category (URL) AND sub-category (Button)
-  const displayItems = masterData.filter(item => 
+  const displayItems = masterData.filter(item =>
     item.type === category && (activeSub === "All" || item.sub === activeSub)
   )
 
   return (
     <main className="min-h-screen bg-black text-white">
       <Header />
-      
+
       <div className="pt-32 pb-20 max-w-[1800px] mx-auto px-6 lg:px-24">
         {/* Dynamic Title */}
         <div className="mb-12">
@@ -97,9 +97,8 @@ export default function CategoryPage() {
             <button
               key={sub}
               onClick={() => setActiveSub(sub)}
-              className={`text-[10px] whitespace-nowrap uppercase tracking-[0.3em] font-bold transition-all ${
-                activeSub === sub ? "text-[#d4af37]" : "text-zinc-500 hover:text-white"
-              }`}
+              className={`text-[10px] whitespace-nowrap uppercase tracking-[0.3em] font-bold transition-all ${activeSub === sub ? "text-[#d4af37]" : "text-zinc-500 hover:text-white"
+                }`}
             >
               {sub}
             </button>
@@ -113,7 +112,7 @@ export default function CategoryPage() {
               <div key={item.id} className="group">
                 <div className="relative aspect-[3/4] bg-zinc-950 border border-zinc-900 overflow-hidden mb-4">
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80" />
-                  <button 
+                  <button
                     onClick={() => addToCart(item)}
                     className="absolute bottom-4 left-4 right-4 bg-white text-black py-3 text-[10px] font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity"
                   >
