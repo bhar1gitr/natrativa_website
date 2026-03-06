@@ -64,7 +64,7 @@ export default function About() {
             
             <div className="relative group aspect-[4/5] overflow-hidden border border-zinc-900 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
               <img
-                src="/fashion-brand-lifestyle.jpg"
+                src="/golf.jpg"
                 alt="NETRUTV Vision"
                 className="w-full h-full object-cover grayscale-[60%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2s] cubic-bezier(0.19, 1, 0.22, 1)"
               />
